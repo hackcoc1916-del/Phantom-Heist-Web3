@@ -306,7 +306,7 @@ export default function MissionReplay({ params }: { params: Promise<{ id: string
                   </div>
                   
                   {/* Dynamic Visuals based on event */}
-                  <AnimatePresence mode="wait">
+                  <AnimatePresence>
                     <motion.div 
                       key={currentEvent.type}
                       initial={{ opacity: 0, scale: 1.1 }}
@@ -321,7 +321,7 @@ export default function MissionReplay({ params }: { params: Promise<{ id: string
                   
                   {/* Overlay text */}
                   <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black via-black/80 to-transparent z-20">
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence>
                       <motion.h2 
                         key={currentEventIdx}
                         initial={{ opacity: 0, y: 10 }}
