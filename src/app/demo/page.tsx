@@ -11,7 +11,7 @@ import { useAudio } from "@/providers/AudioProvider";
 
 export default function DemoMode() {
   const router = useRouter();
-  const { setMatchId, setPlayer, setOpponent, updatePlayerState } = useGameStore();
+  const { createLobby, simulateOpponentJoin, setLoadout, commitStrategy, simulateOpponentCommit, setStatus } = useGameStore();
   const { playClick, playSuccess, playError } = useAudio();
   
   const [phase, setPhase] = useState(0);
@@ -22,26 +22,29 @@ export default function DemoMode() {
   };
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
     const runDemo = async () => {
       // Phase 0: Init
       toast.info("Demo Mode Initialized");
       playClick();
       addLog("Initializing mock players...");
-      setMatchId("PH-DEMO-99");
-      setPlayer({ id: "p1", name: "Judge (Player 1)", status: "planning", role: "Ghost", loadout: [] });
-      setOpponent({ id: "p2", name: "AI Opponent", status: "planning" });
+      const lobbyId = createLobby();
+      setStatus('lobby');
+      
+      await new Promise(r => setTimeout(r, 1000));
+      simulateOpponentJoin();
       
       await new Promise(r => setTimeout(r, 2000));
       setPhase(1);
       
       // Phase 1: Planning
       addLog("Simulating Mission Planning...");
+      setStatus('planning');
       playClick();
       await new Promise(r => setTimeout(r, 1500));
       addLog("Auto-selecting Loadout: Ghost, EMP, Grappling Hook");
-      updatePlayerState({ loadout: ["Ghost", "EMP", "Grappling Hook"] });
+      setLoadout('agent', 'Ghost');
+      setLoadout('equipment1', 'EMP');
+      setLoadout('entry', 'Grappling Hook');
       
       await new Promise(r => setTimeout(r, 2000));
       setPhase(2);
@@ -49,10 +52,11 @@ export default function DemoMode() {
       // Phase 2: Committing Strategy
       addLog("Committing Strategy to Midnight Network...");
       playSuccess();
-      updatePlayerState({ status: "committed" });
+      commitStrategy();
       
       await new Promise(r => setTimeout(r, 2500));
       addLog("Opponent committed strategy.");
+      simulateOpponentCommit();
       
       await new Promise(r => setTimeout(r, 1500));
       setPhase(3);
@@ -64,7 +68,7 @@ export default function DemoMode() {
       
       // Redirect to Replay
       toast.success("Redirecting to Mission Replay...");
-      router.push("/results/PH-DEMO-99");
+      router.push(`/results/${lobbyId}`);
       
       // The Replay page will take 22 seconds to finish.
       // We don't need to control it from here, the user just watches it.
@@ -72,8 +76,7 @@ export default function DemoMode() {
 
     runDemo();
 
-    return () => clearTimeout(timeoutId);
-  }, [router, setMatchId, setPlayer, setOpponent, updatePlayerState, playClick, playSuccess, playError]);
+  }, [router, createLobby, simulateOpponentJoin, setLoadout, commitStrategy, simulateOpponentCommit, setStatus, playClick, playSuccess, playError]);
 
   return (
     <PageWrapper>
