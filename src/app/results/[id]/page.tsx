@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PageWrapper from "@/components/layout/PageWrapper";
 import GlassCard from "@/components/ui/GlassCard";
@@ -32,11 +32,13 @@ export default function MissionReplay({ params }: { params: Promise<{ id: string
   const [timeElapsed, setTimeElapsed] = useState(0); // in ms
   const [currentEventIdx, setCurrentEventIdx] = useState(-1);
   const [missionComplete, setMissionComplete] = useState(false);
+  
+  const currentEventIdxRef = useRef(-1);
+  const hasCompletedRef = useRef(false);
 
   // Timer loop
   useEffect(() => {
     const startTime = Date.now();
-    let hasCompleted = false;
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -50,7 +52,8 @@ export default function MissionReplay({ params }: { params: Promise<{ id: string
         }
       }
 
-      if (newIdx !== currentEventIdx) {
+      if (newIdx !== currentEventIdxRef.current) {
+        currentEventIdxRef.current = newIdx;
         setCurrentEventIdx(newIdx);
         // Play SFX on event change
         if (newIdx >= 0 && newIdx < EVENTS.length) {
@@ -59,9 +62,9 @@ export default function MissionReplay({ params }: { params: Promise<{ id: string
         }
       }
 
-      if (elapsed > EVENTS[EVENTS.length - 1].time + 2000 && !hasCompleted) {
+      if (elapsed > EVENTS[EVENTS.length - 1].time + 2000 && !hasCompletedRef.current) {
+        hasCompletedRef.current = true;
         setMissionComplete(true);
-        hasCompleted = true;
         playSuccess();
         
         // Confetti explosion
@@ -73,7 +76,6 @@ export default function MissionReplay({ params }: { params: Promise<{ id: string
           disableForReducedMotion: true
         });
 
-        // Achievement popup
         setTimeout(() => {
           toast.success("Achievement Unlocked: Flawless Ghost");
         }, 1500);
@@ -83,7 +85,7 @@ export default function MissionReplay({ params }: { params: Promise<{ id: string
     }, 100);
 
     return () => clearInterval(interval);
-  }, [currentEventIdx, playClick, playError, playSuccess]);
+  }, [playClick, playError, playSuccess]);
 
   // Derived state
   const currentEvent = currentEventIdx >= 0 ? EVENTS[currentEventIdx] : { stealth: 100, detection: 0, type: "idle" };
