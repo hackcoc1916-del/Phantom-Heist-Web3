@@ -306,31 +306,26 @@ export default function MissionReplay({ params }: { params: Promise<{ id: string
                   </div>
                   
                   {/* Dynamic Visuals based on event */}
-                  <motion.div 
+                  <div 
                     key={currentEvent.type}
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className="absolute inset-0"
+                    className="absolute inset-0 opacity-100"
                   >
                     {renderVisualizer()}
-                  </motion.div>
+                  </div>
                   
                   {/* Overlay text */}
                   <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black via-black/80 to-transparent z-20">
-                    <motion.h2 
+                    <h2 
                       key={currentEventIdx}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
                       className={clsx(
-                        "text-3xl font-black uppercase tracking-widest",
+                        "text-3xl font-black uppercase tracking-widest opacity-100",
                         currentEvent.type === "danger" ? "text-danger" : 
                         currentEvent.type === "hack" ? "text-accent" : 
                         "text-white"
                       )}
                     >
                       {currentEventIdx >= 0 ? EVENTS[currentEventIdx].text : "Initiating Replay..."}
-                    </motion.h2>
+                    </h2>
                   </div>
                 </GlassCard>
               </div>
