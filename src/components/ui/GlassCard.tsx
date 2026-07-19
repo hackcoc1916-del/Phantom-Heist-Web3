@@ -19,7 +19,7 @@ export default function GlassCard({ children, className, glow = false }: GlassCa
         className
       )}
     >
-      <div className="relative z-10">{children}</div>
+      <div className="relative z-10 w-full h-full">{children}</div>
       {glow && (
         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 pointer-events-none" />
       )}
