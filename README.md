@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Phantom Heist
 
-## Getting Started
+![Phantom Heist Banner](https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop)
 
-First, run the development server:
+**Plan Secretly. Execute Simultaneously. Win Cryptographically.**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Phantom Heist is a multiplayer stealth strategy game powered by the Midnight Blockchain. It proves that competitive PvP games can exist entirely on-chain without sacrificing hidden information, speed, or gameplay depth.
+
+---
+
+## 🏆 Hackathon Project
+
+This project was built for the Midnight Blockchain Hackathon to demonstrate the incredible potential of Data Protection and Zero-Knowledge proofs in gaming.
+
+### Business Value
+The Web3 gaming industry is currently bottlenecked by the "transparent ledger" problem. Because all blockchain data is public by default, games relying on hidden information (Fog of War, Secret Strategies, Hidden Roles) cannot be built on standard chains without centralizing the game logic on a private server.
+
+Phantom Heist solves this. By leveraging Midnight, we unlock an entirely new genre of trustless, decentralized games. This SDK integration opens the door for developers to build Poker, Strategy, and Social Deduction games fully on-chain.
+
+### Judging Criteria Mapping
+- **Innovation**: First-of-its-kind cryptographic PvP stealth strategy game.
+- **Technical Complexity**: Seamlessly orchestrates Zero-Knowledge commitments, automated orchestration timers, and Procedural Web Audio synthesis without dropping frames.
+- **User Experience (UX)**: Features a AAA-quality, Framer Motion-powered interface with micro-interactions, responsive design, and dynamic loading states.
+
+---
+
+## ⚠️ The Problem: Public Ledger Gaming
+
+In traditional Web3 multiplayer games:
+1. **Front-running**: If Player A commits a strategy to the chain, Player B can view the mempool, see Player A's move, and counter it perfectly.
+2. **State Leakage**: You cannot build a "stealth" game if everyone can read your coordinates on an block explorer.
+
+## 🛡️ The Solution: Midnight Blockchain
+
+Phantom Heist uses Midnight's core capabilities:
+- **Zero-Knowledge Commitments**: Players select their loadouts and infiltration paths in the **Planning Room**. This data is encrypted locally and submitted to the chain as a cryptographic proof.
+- **Simultaneous Resolution**: Only when both players have submitted their ZK-proofs does the smart contract verify the rules and resolve the outcome. 
+- **Privacy Dashboard**: We built a dedicated dashboard (`/privacy`) to explicitly visualize the difference between the transparent public ledger (Game ID, Timestamps) and the encrypted Midnight state (Pathways, Equipment).
+
+---
+
+## 🏗️ Architecture Diagram
+
+```mermaid
+graph TD
+    UI[Next.js App Router UI] --> GameStore[Zustand Local State]
+    GameStore --> ServiceLayer[Midnight Service Layer]
+    
+    subgraph ServiceLayer
+        Wallet[Wallet Interface]
+        Game[Lobby Logic]
+        ZK[Zero-Knowledge SDK]
+    end
+    
+    ServiceLayer --> |Encrypted Payloads| Midnight[Midnight Network]
+    Midnight --> |Verification| ServiceLayer
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Technology Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: Next.js 15 (App Router)
+- **Styling**: Tailwind CSS v4
+- **Animations**: Framer Motion
+- **State Management**: Zustand
+- **Audio Engine**: Native Web Audio API (Procedural Synthesis)
+- **Icons & UI**: Lucide React, Sonner (Toasts), Canvas Confetti
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📁 Folder Structure
 
-## Learn More
+```
+phantom-heist/
+├── src/
+│   ├── app/                # Next.js App Router (Pages & Layouts)
+│   ├── components/         # Reusable UI Components (Cards, Buttons, Cursors)
+│   ├── providers/          # Global Contexts (AudioProvider)
+│   ├── services/           # Midnight Blockchain Integration Layer
+│   └── store/              # Zustand State Management
+├── public/                 # Static Assets
+└── package.json            # Dependencies
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Setup Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone the repository**
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+3. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+4. **View the application**: Open `http://localhost:3000` in your browser.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> **Note**: For Hackathon Judges, we have included a **Launch Demo Mode** button on the homepage. Clicking this will run an automated, 60-second end-to-end demonstration of the game flow, simulated networking, cinematic replay, and the Privacy Dashboard.
 
-## Deploy on Vercel
+## 🔮 Future Roadmap
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Mainnet SDK Integration**: Swap out the `src/services/mock` classes with the live Midnight smart contracts.
+- **Expanded Arsenal**: Introduce more Operatives (e.g., Demolitions, Sniper) and map layouts.
+- **Tokenomics**: Implement an economy where players stake tokens on their heist outcomes, protected by Midnight's shielded pools.
